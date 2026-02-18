@@ -3,229 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Um Convite Especial ❤️</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <title>Emily Camily | Filmmaker & Editor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
     <style>
         :root {
-            --primary: #ff4d6d;
-            --secondary: #ff8fa3;
-            --bg: #fff0f3;
-            --envelope-color: #ffb3c1;
-            --paper-color: #ffffff;
+            --bg: #0a0510; 
+            --card-bg: rgba(30, 15, 50, 0.4);
+            --accent: #bc6ff1; 
+            --accent-glow: #892cdc; 
+            --text: #ffffff;
+            --text-dim: #d1c4e9;
+            --glass-border: rgba(188, 111, 241, 0.2);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
 
         body {
-            margin: 0; padding: 0;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh;
             background-color: var(--bg);
-            font-family: 'Segoe UI', sans-serif;
-            overflow: hidden; color: #590d22;
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(137, 44, 220, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(188, 111, 241, 0.1) 0%, transparent 30%);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* Telas */
-        #game-screen, #invite-screen {
-            text-align: center; z-index: 10; width: 100%;
-            display: flex; flex-direction: column; align-items: center;
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; position: fixed; width: 100%; top: 0;
+            background: rgba(10, 5, 16, 0.8); backdrop-filter: blur(15px);
+            z-index: 1000; border-bottom: 1px solid var(--glass-border);
         }
 
-        #invite-screen { display: none; }
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: 2px; }
+        .logo span { color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); }
 
-        .game-card {
-            background: white; padding: 2rem; border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
-            max-width: 400px; width: 85%;
+        nav { display: flex; align-items: center; gap: 20px; }
+        nav a { color: #fff; text-decoration: none; font-weight: 600; font-size: 0.85rem; transition: 0.3s; }
+        nav a:hover { color: var(--accent); }
+        
+        .social-link { color: var(--accent); font-size: 1.4rem; transition: 0.3s; text-decoration: none; }
+        .social-link:hover { transform: scale(1.2); color: #fff; }
+
+        #hero {
+            height: 50vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding-top: 80px;
         }
 
-        .score-badge {
-            background: var(--primary); color: white;
-            padding: 8px 20px; border-radius: 50px;
-            font-weight: bold; margin-bottom: 1.5rem; display: inline-block;
+        #hero h1 {
+            font-size: 4.5rem; margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, var(--accent), #fff);
+            background-size: 200% auto; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; animation: shine 3s linear infinite;
+            font-weight: 800;
         }
 
-        #arena {
-            height: 200px; position: relative;
-            background: #fffafa; border-radius: 20px;
-            border: 2px dashed var(--secondary); margin: 1.5rem 0;
+        .about-section {
+            padding: 100px 8%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
         }
 
-        #target {
-            font-size: 50px; position: absolute; cursor: pointer;
-            transition: all 0.1s ease-out; user-select: none;
+        .about-image {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            justify-self: center;
+            min-height: 300px; /* Evita que o layout pule enquanto carrega */
         }
 
-        /* --- ANIMAÇÃO DA CARTA --- */
-        .envelope-wrapper {
-            position: relative; cursor: pointer;
-            transition: transform 0.3s;
+        .about-image img {
+            width: 100%;
+            border-radius: 30px;
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 0 30px rgba(188, 111, 241, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
-        .envelope {
-            position: relative; width: 300px; height: 200px;
-            background: var(--envelope-color);
-            border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-top: 50px;
+        .about-text h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--accent); }
+        .about-text p { font-size: 1.1rem; line-height: 1.8; color: var(--text-dim); margin-bottom: 20px; }
+        .about-text .highlight { color: #fff; font-weight: 700; }
+
+        .filter-container { text-align: center; margin-bottom: 40px; }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 25px;
+            margin: 0 5px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        /* Aba do envelope */
-        .envelope::before {
-            content: ""; position: absolute; top: 0; z-index: 2;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 110px solid var(--primary);
-            transform-origin: top;
-            transition: transform 0.5s 0.3s;
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
         }
 
-        /* Papel dentro da carta */
-        .letter {
-            position: absolute; bottom: 0; left: 10px;
-            width: 280px; height: 180px;
-            background: var(--paper-color);
-            padding: 15px; border-radius: 5px;
-            box-sizing: border-box;
-            transition: transform 0.5s, height 0.5s;
-            overflow: hidden; text-align: left;
-            font-size: 0.85rem; line-height: 1.4;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        .container { padding: 0 8% 100px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px; }
+
+        .item {
+            background: var(--card-bg); border-radius: 25px; overflow: hidden;
+            border: 1px solid var(--glass-border); backdrop-filter: blur(10px);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0; transform: translateY(50px);
         }
+        
+        .item.reveal { opacity: 1; transform: translateY(0); }
+        .item.hide { display: none; }
 
-        /* Estado Aberto */
-        .envelope-wrapper.open .envelope::before {
-            transform: rotateX(180deg); z-index: 0;
-        }
+        .media-container { width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; }
+        .media-container img, .media-container video { width: 100%; height: 100%; object-fit: cover; }
 
-        .envelope-wrapper.open .letter {
-            transform: translateY(-120px);
-            height: 320px; z-index: 1;
-        }
+        .item-info { padding: 25px; border-top: 1px solid var(--glass-border); }
+        .item-info h3 { font-size: 1.3rem; color: #fff; }
 
-        .envelope-wrapper.open { transform: translateY(80px); }
+        .budget-section { background: rgba(255,255,255,0.03); padding: 80px 8%; border-top: 1px solid var(--glass-border); }
+        .form-container { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 30px; border: 1px solid var(--glass-border); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--accent); font-weight: 600; }
+        input, textarea, select { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 10px; color: #fff; outline: none; }
+        .btn-submit { width: 100%; padding: 15px; background: #25d366; border: none; border-radius: 10px; color: #fff; font-weight: 800; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn-submit:hover { background: #1da851; transform: scale(1.02); }
 
-        .click-hint {
-            margin-top: 20px; font-weight: bold; color: var(--primary);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; }
-        }
-
-        .btn-yes {
-            background: var(--primary); color: white; border: none;
-            padding: 12px 30px; border-radius: 30px;
-            font-size: 1rem; cursor: pointer; font-weight: bold;
-            margin-top: 15px; width: 100%;
-            display: none; /* Só aparece quando a carta abre */
-        }
-
-        /* Corações ao fundo */
-        .heart-bg {
-            position: absolute; color: var(--secondary);
-            opacity: 0.3; animation: fly 4s linear infinite; pointer-events: none;
-        }
-
-        @keyframes fly {
-            0% { transform: translateY(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-100vh); opacity: 0; }
+        .admin-login-trigger { position: fixed; bottom: 20px; left: 20px; opacity: 0.3; cursor: pointer; font-size: 0.7rem; color: var(--text-dim); z-index: 999; }
+        .modal-admin { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1025; padding: 40px; border-radius: 20px; z-index: 3000; border: 2px solid var(--accent); width: 95%; max-width: 600px; box-shadow: 0 0 100px rgba(0,0,0,1); max-height: 90vh; overflow-y: auto; }
+        
+        @keyframes shine { to { background-position: 200% center; } }
+        @media (max-width: 768px) { 
+            header { padding: 15px 5%; }
+            .about-section { grid-template-columns: 1fr; text-align: center; } 
+            #hero h1 { font-size: 2.8rem; } 
+            nav a:not(.social-link) { display: none; } 
         }
     </style>
 </head>
 <body>
 
-    <div id="game-screen">
-        <div class="game-card">
-            <div class="score-badge">Desafio: <span id="score">0</span> / 3</div>
-            <h2>Pegue meu coração! ❤️</h2>
-            <div id="arena">
-                <div id="target">❤️</div>
-            </div>
+    <header>
+        <div class="logo">EMILY<span>CAMILY</span></div>
+        <nav>
+            <a href="#sobre">SOBRE</a>
+            <a href="#portfolio">PORTFÓLIO</a>
+            <a href="#contato">ORÇAMENTO</a>
+            <a href="https://instagram.com/emilycccamily" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <p style="color: var(--accent); letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; font-weight: 700;">Filmmaker • Editor • Motion</p>
+        <h1>Creative Vision</h1>
+    </section>
+
+    <section class="about-section" id="sobre">
+        <div class="about-image">
+            <img id="foto-perfil" src="" alt="Emily Camily">
         </div>
+        <div class="about-text">
+           <h2>Olá, eu sou a Emily</h2>
+            <p>Sou apaixonada por transformar ideias em experiências visuais memoráveis. Como <span class="highlight">Filmmaker e Editora</span>, foco em criar conteúdos que não apenas contam uma história, mas transmitem uma emoção única através de movimentos, cores e ritmo.</p>
+            <p>Meu objetivo é elevar o nível visual do seu projeto. Vamos criar algo incrível?</p>
+        </div>
+    </section>
+
+    <div class="container" id="portfolio">
+        <h2 style="text-align: center; margin-bottom: 30px;">Meus Trabalhos</h2>
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filtrar('all')">Todos</button>
+            <button class="filter-btn" onclick="filtrar('video')">Vídeos</button>
+            <button class="filter-btn" onclick="filtrar('foto')">Fotos</button>
+        </div>
+        <div class="grid" id="portfolio-grid"></div>
     </div>
 
-    <div id="invite-screen">
-        <h2 style="color: var(--primary); margin: 0;">VOCÊ O PEGOU! 🎉</h2>
-        <p>Ele tem uma mensagem para você...</p>
-
-        <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
-            <div class="envelope">
-                <div class="letter" id="letter-content">
-                    <strong style="color: var(--primary); font-size: 1.1rem;">Para o meu amor,</strong><br><br>
-                    "Desde que você chegou, minha vida ganhou uma cor que eu nem sabia que existia. 
-                    Você é meu porto seguro, meu sorriso mais sincero e o motivo dos meus sonhos mais lindos.
-                    <br><br>
-                    Não quero apenas o dia 14, quero todos os dias ao seu lado. Eu te amo muito!"
-                    <br><br>
-                    <strong>Quer ser meu Valentine?</strong>
-                    <button class="btn-yes" id="btn-final" onclick="finalCelebrate(event)">COM CERTEZA! ❤️</button>
+    <section class="budget-section" id="contato">
+        <div class="form-container">
+            <h2 style="text-align: center; margin-bottom: 30px;">Solicitar Orçamento</h2>
+            <form id="whatsapp-form">
+                <div class="form-group"><label>Seu Nome</label><input type="text" id="nome" required></div>
+                <div class="form-group">
+                    <label>Tipo de Projeto</label>
+                    <select id="projeto">
+                        <option value="Edição de Vídeo">Edição de Vídeo</option>
+                        <option value="Filmmaking">Filmmaking</option>
+                        <option value="Fotos">Fotos</option>
+                    </select>
                 </div>
-            </div>
+                <div class="form-group"><label>Mensagem</label><textarea id="mensagem" rows="4"></textarea></div>
+                <button type="submit" class="btn-submit">Enviar para WhatsApp <i class="fab fa-whatsapp"></i></button>
+            </form>
         </div>
-        <p class="click-hint" id="hint-text">Toque na carta para abrir</p>
+    </section>
+
+    <div class="admin-login-trigger" onclick="abrirModalLogin()">Acesso Restrito</div>
+
+    <div id="login-modal" class="modal-admin" style="text-align: center;">
+        <h3 style="color: var(--accent); margin-bottom: 20px;">Login do Dono</h3>
+        <input type="password" id="senha-input" placeholder="Senha Administrativa" style="margin-bottom: 10px;">
+        <button class="btn-submit" style="background: var(--accent);" onclick="verificarSenha()">Entrar</button>
     </div>
 
-    <script>
-        let score = 0;
-        const target = document.getElementById('target');
-        const arena = document.getElementById('arena');
-        const scoreEl = document.getElementById('score');
+    <div id="admin-panel" class="modal-admin">
+        <h2 style="color: var(--accent); margin-bottom: 20px; text-align: center;">Gerenciar Portfólio</h2>
+        <div class="form-group"><label>Título</label><input type="text" id="admin-titulo"></div>
+        <div class="form-group">
+            <label>Tipo</label>
+            <select id="admin-tipo"><option value="video">Vídeo</option><option value="foto">Foto</option></select>
+        </div>
+        <div class="form-group">
+            <label>Arquivo</label>
+            <input type="file" id="admin-file" accept="video/*,image/*">
+        </div>
+        <div id="progress-container" style="display:none; background:#333; height:10px; border-radius:5px; margin-bottom:15px;">
+            <div id="progress-bar" style="background:var(--accent); width:0%; height:100%; border-radius:5px;"></div>
+        </div>
+        <button class="btn-submit" style="background: var(--accent);" id="save-btn">Publicar</button>
+        <div id="admin-manage-list" style="margin-top:20px;"></div>
+        <button onclick="fecharModais()" style="background:none; border:none; color:#aaa; width:100%; margin-top:25px; cursor:pointer;">Fechar</button>
+    </div>
 
-        function move() {
-            const x = Math.random() * (arena.clientWidth - 60);
-            const y = Math.random() * (arena.clientHeight - 60);
-            target.style.left = `${x}px`;
-            target.style.top = `${y}px`;
-        }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-        target.addEventListener('mouseover', move);
-        target.addEventListener('touchstart', (e) => { e.preventDefault(); move(); });
+        const firebaseConfig = {
+          apiKey: "AIzaSyB2L8ekxaEuwt1aNgOU6trx0kUA_KmSwNw",
+          authDomain: "filmaker-9e0ae.firebaseapp.com",
+          projectId: "filmaker-9e0ae",
+          storageBucket: "filmaker-9e0ae.firebasestorage.app",
+          messagingSenderId: "29035256327",
+          appId: "1:29035256327:web:e332f249194a79850ee8a2"
+        };
 
-        target.addEventListener('click', () => {
-            score++;
-            scoreEl.innerText = score;
-            if (score >= 3) {
-                document.getElementById('game-screen').style.display = 'none';
-                document.getElementById('invite-screen').style.display = 'flex';
-                confetti({ particleCount: 150, spread: 70 });
-            } else {
-                move();
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // FUNÇÃO PARA CARREGAR FOTO DE PERFIL FIXA DO STORAGE
+        async function loadProfileImage() {
+            const profileImg = document.getElementById('foto-perfil');
+            try {
+                // Busca a URL pública do arquivo perfil.jpeg que você já subiu
+                const url = await getDownloadURL(ref(storage, 'perfil.jpeg'));
+                profileImg.src = url;
+                profileImg.style.opacity = "1";
+            } catch (error) {
+                console.error("Erro ao carregar foto de perfil:", error);
+                profileImg.src = "https://via.placeholder.com/400x500?text=Adicione+perfil.jpeg";
+                profileImg.style.opacity = "1";
             }
-        });
-
-        function openLetter() {
-            const envelope = document.getElementById('envelope');
-            const btn = document.getElementById('btn-final');
-            const hint = document.getElementById('hint-text');
-            
-            envelope.classList.add('open');
-            hint.style.display = 'none';
-            
-            // Espera a animação da carta subir para mostrar o botão
-            setTimeout(() => {
-                btn.style.display = 'block';
-            }, 600);
         }
 
-        function finalCelebrate(event) {
-            event.stopPropagation(); // Impede de fechar a carta ao clicar no botão
-            confetti({ particleCount: 400, spread: 200 });
-            alert("Te amo! Prepare-se para o melhor dia 14 de todos! 🥰");
+        // WHATSAPP
+        document.getElementById('whatsapp-form').onsubmit = function(e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const projeto = document.getElementById('projeto').value;
+            const msg = document.getElementById('mensagem').value;
+            const telefone = "5581996913110"; 
+            const texto = `Olá Emily! Meu nome é ${nome}. Gostaria de solicitar um orçamento para ${projeto}.%0A%0AMensagem: ${msg}`;
+            window.open(`https://api.whatsapp.com/send?phone=${telefone}&text=${texto}`, '_blank');
+        };
+
+        window.filtrar = (categoria) => {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+
+            const itens = document.querySelectorAll('.item');
+            itens.forEach(item => {
+                if(categoria === 'all' || item.getAttribute('data-tipo') === categoria) {
+                    item.classList.remove('hide');
+                } else {
+                    item.classList.add('hide');
+                }
+            });
+        };
+
+        async function loadPortfolio() {
+            const grid = document.getElementById('portfolio-grid');
+            const manageList = document.getElementById('admin-manage-list');
+            const q = query(collection(db, "projetos"), orderBy("timestamp", "desc"));
+            const querySnapshot = await getDocs(q);
+            grid.innerHTML = "";
+            manageList.innerHTML = "<h3>Gerenciar Itens:</h3>";
+            
+            querySnapshot.forEach((documento) => {
+                const data = documento.data();
+                const id = documento.id;
+                const card = document.createElement('div');
+                card.className = 'item reveal';
+                card.setAttribute('data-tipo', data.tipo);
+                card.innerHTML = `
+                    <div class="media-container">
+                        ${data.tipo === 'video' ? `<video src="${data.url}" muted onmouseover="this.play()" onmouseout="this.pause()" loop></video>` : `<img src="${data.url}">`}
+                    </div>
+                    <div class="item-info"><h3>${data.titulo}</h3></div>`;
+                grid.appendChild(card);
+
+                const row = document.createElement('div');
+                row.style = "display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #333";
+                row.innerHTML = `<span>${data.titulo}</span><button onclick="window.deletar('${id}','${data.url}')" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Excluir</button>`;
+                manageList.appendChild(row);
+            });
         }
 
-        // Corações flutuantes
-        setInterval(() => {
-            const h = document.createElement('div');
-            h.innerHTML = '❤️';
-            h.className = 'heart-bg';
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.top = '100vh';
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 4000);
-        }, 400);
+        window.deletar = async (id, url) => {
+            if(confirm("Deseja mesmo excluir?")) {
+                await deleteDoc(doc(db, "projetos", id));
+                try { await deleteObject(ref(storage, url)); } catch(e) {}
+                location.reload();
+            }
+        };
 
-        move();
+        document.getElementById('save-btn').onclick = async () => {
+            const file = document.getElementById('admin-file').files[0];
+            const titulo = document.getElementById('admin-titulo').value;
+            const tipo = document.getElementById('admin-tipo').value;
+            if(!file || !titulo) return alert("Preencha tudo!");
+
+            const storageRef = ref(storage, `portfolio/${Date.now()}_${file.name}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            document.getElementById('progress-container').style.display = 'block';
+
+            uploadTask.on('state_changed', 
+                (s) => { document.getElementById('progress-bar').style.width = (s.bytesTransferred/s.totalBytes)*100 + '%'; }, 
+                (e) => alert("Erro ao subir arquivo"), 
+                async () => {
+                    const url = await getDownloadURL(uploadTask.snapshot.ref);
+                    await addDoc(collection(db, "projetos"), { titulo, url, tipo, timestamp: serverTimestamp() });
+                    location.reload();
+                }
+            );
+        };
+
+        // Inicia carregamento
+        loadProfileImage(); 
+        loadPortfolio();
+
+        window.abrirModalLogin = () => document.getElementById('login-modal').style.display = 'block';
+        window.fecharModais = () => { document.getElementById('login-modal').style.display = 'none'; document.getElementById('admin-panel').style.display = 'none'; };
+        window.verificarSenha = () => {
+            if(document.getElementById('senha-input').value === "2024") {
+                document.getElementById('login-modal').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            } else { alert("Senha incorreta!"); }
+        };
     </script>
 </body>
 </html>
